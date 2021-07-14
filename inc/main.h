@@ -1,6 +1,8 @@
 /*=============================================================================
  * Author: Fernando Prokopiuk <fernandoprokopiuk@gmail.com>
+ * Author: Armando Suhuán <suhuan.aj@pucp.edu.pe>
  * Date: 2021/07/07
+ * Version: v1.0
  *===========================================================================*/
 
 /*=====[Avoid multiple inclusion - begin]====================================*/

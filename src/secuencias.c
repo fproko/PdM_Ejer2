@@ -23,19 +23,48 @@ i->   0     1    2    3	     i->  0     1    2    3
  * Output: No devuelve salida
  *===========================================================================*/
 
+void activarSecuencia(gpioMap_t *psecuencia, uint16_t *tiempoDestello)
+{
+    static int8_t i = 0;
+    static bool blinkLed = 1;
+    static uint8_t estadoSemaforo = 0; // Estados-> 0=NORMAL  1=DESCONECTADO  2=ALARMA
+    static delay_t delay;
 
-
-void activarSecuencia(gpioMap_t * psecuencia, int8_t * tiempoDestello, int8_t i){
-
-    if (leerTecla(TEC1) == flagsControl[0])
+    if (leerTecla(TEC2) == 0)
     {
-        psecuencia = secuencia1;
+        estadoSemaforo++;
     }
-    if (leerTecla(TEC4) == flagsControl[0])
+    if (estadoSemaforo > 2)
     {
-        psecuencia = secuencia2;
+        estadoSemaforo = 0;
+    }
+    if (estadoSemaforo == 0)
+    {
+        apagarLeds();
+        delayWrite(&delay, *(tiempoDestello + i));
+        encenderLed(*(psecuencia + i));
+
+        if (delayRead(&delay))
+        {
+            i++;
+        }
+        if (i > 2)
+        {
+            i = 0;
+        }
     }
 
-    apagarLeds();
-	encenderLed(*(psecuencia+i));
+    if (estadoSemaforo == 1)
+    {
+        apagarLeds();
+        gpioWrite(LEDG, ON);
+        i = 0;
+    }
+
+    if (estadoSemaforo == 2)
+    {
+        apagarLeds();
+        gpioWrite(LEDB, ON);
+        i = 0;
+    }
 }
